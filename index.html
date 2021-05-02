@@ -1,0 +1,135 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Google Map</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Google Map">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <meta name="theme-color" content="#fafafa">
+
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+      height: 100%;
+      width: 100%;
+      position:absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+  #addressform {
+    position: relative;
+    z-index: 1; /* The z-index should be higher than Google Maps */
+    width: 300px;
+    margin: 55px 2px;
+    padding: 10px;
+    background: whitesmoke;
+    height: 200px;/* Set the opacity for a slightly transparent Google Form */
+  }
+  </style>
+
+  <script>
+      let map;
+
+      function initMap() {
+        const uluru = { lat: 19.4319716, lng: -99.1356141 };
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 10,
+          center: uluru,
+        });
+
+        //Agrega un marcador al mapa
+        const marker = new google.maps.Marker({
+          position: uluru,
+          map: map,
+        });
+
+        //Declara la ventana informativa y el mensaje
+        const infowindow = new google.maps.InfoWindow({
+          content: "<p>Marker Location:" + marker.getPosition() + "</p>",
+        });
+
+        //Al dar click en el marcado agrega una ventana informativa
+        google.maps.event.addListener(marker, "click", () => {
+          infowindow.open(map, marker);
+        });
+
+        //Al dar click en el marcador hace un zoom
+        marker.addListener("click", () => {
+          map.setZoom(15);
+          map.setCenter(marker.getPosition());
+        });
+
+        //Al dar click en algun punto del mapa pone un marcador
+        map.addListener("click", (e) => {
+          placeMarkerAndPanTo(e.latLng, map);
+        });
+
+      }
+
+      function placeMarkerAndPanTo(latLng, map) {
+        new google.maps.Marker({
+          position: latLng,
+          map: map,
+        });
+        map.panTo(latLng);
+      }
+    </script>
+</head>
+
+<body>
+  <!-- Add your site or application content here -->
+
+  <div id="map"></div>
+  <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+
+<!--  <div id="addressform">
+    &lt;!&ndash; You can even embed a Google Form here &ndash;&gt;
+    <br>
+    <input type="text" style="width: 95%;height: 30px; border-radius: 10px;" placeholder="Punto A"><br><br>
+    <input type="text" style="width: 95%;height: 30px; border-radius: 10px;" placeholder="Punto B">
+  </div>-->
+
+  <!-- Application content end here -->
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+</body>
+
+</html>
